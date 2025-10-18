@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimoni Board - Cinematic IT Code Vibe</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace; /* IT code vibe */
+            background: linear-gradient(135deg, #000000, #1a1a1a); /* Clean black gradient for futuristic feel */
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        /* Futuristic glow effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 0, 255, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+        /* Matrix rain effect for cinematic IT vibes */
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -2;
+        }
+        .matrix-rain span {
+            position: absolute;
+            color: #ff00ff; /* Magenta for futuristic aesthetic */
+            font-size: 14px;
+            animation: fall 3s linear infinite;
+            opacity: 0.7;
+        }
+        @keyframes fall {
+            from { top: -20px; opacity: 1; transform: translateX(0); }
+            to { top: 100vh; opacity: 0; transform: translateX(10px); }
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 0 0 20px #ff00ff;
+            color: #ff00ff;
+        }
+        .form-container {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ff00ff;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        .form-container h2 {
+            margin-top: 0;
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        select, input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ff00ff;
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            box-shadow: inset 0 0 10px rgba(255, 0, 255, 0.2);
+        }
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #ff00ff;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+        }
+        button {
+            background: linear-gradient(45deg, #ff00ff, #800080);
+            color: #ffffff;
+            border: none;
+            padding: 12px 25px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .note {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ff00ff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+            position: relative;
+            font-family: 'Courier New', monospace;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+        .note:hover {
+            transform: translateY(-5px);
+        }
+        .note.hidden {
+            display: none;
+        }
+        .note .rating {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #ff00ff;
+        }
+        .note .alias {
+            font-weight: bold;
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+        }
+        .note .desc {
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+        .owner-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff00ff, #800080);
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        .owner-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+        }
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header {
+                font-size: 2em;
+            }
+            .board {
+                grid-template-columns: 1fr;
+            }
+            .note {
+                padding: 15px;
+            }
+            .form-container {
+                padding: 15px;
+            }
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .header {
+                font-size: 1.5em;
+            }
+            .owner-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-rain" id="matrixRain"></div>
+    <div class="container">
+        <div class="header">Testimoni Board - Cinematic IT Code Vibe</div>
+        
+        <button class="owner-toggle" onclick="toggleOwnerView()">Owner View</button>
+        
+        <div class="form-container">
+            <h2>Submit Testimoni</h2>
+            <form id="testimoniForm">
+                <div class="form-group">
+                    <label for="rating">Satisfaction (0-5):</label>
+                    <select id="rating" name="rating" required>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="alias">Alias:</label>
+                    <input type="text" id="alias" name="alias" required>
+                </div>
+                <div class="form-group">
+                    <label for="desc">Description:</label>
+                    <textarea id="desc" name="desc" rows="4" required></textarea>
+                </div>
+                <button type="submit">Save Testimoni</button>
+            </form>
+        </div>
+        
+        <div class="board" id="board">
+            <!-- Testimoni akan ditambahkan di sini -->
+        </div>
+    </div>
+
+    <script>
+        let isOwner = false;
+        const board = document.getElementById('board');
+        const form = document.getElementById('testimoniForm');
+        const ratingSelect = document.getElementById('rating');
+        const matrixRain = document.getElementById('matrixRain');
+
+        // Generate matrix rain effect
+        function createMatrixRain() {
+            for (let i = 0; i < 100; i++) {
+                const span = document.createElement('span');
+                span.textContent = Math.random() > 0.5 ? '0' : '1';
+                span.style.left = Math.random() * 100 + '%';
+                span.style.animationDelay = Math.random() * 3 + 's';
+                matrixRain.appendChild(span);
+            }
+        }
+        createMatrixRain();
+
+        // Handle form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const rating = parseInt(ratingSelect.value);
+            const alias = document.getElementById('alias').value;
+            const desc = document.getElementById('desc').value;
+
+            if (rating >= 0 && rating <= 5 && alias && desc) {
+                addTestimoni(rating, alias, desc);
+                form.reset();
+            }
+        });
+
+        // Function to add testimoni
+        function addTestimoni(rating, alias, desc) {
+            const note = document.createElement('div');
+            note.className = `note ${rating < 4 ? 'hidden' : ''}`;
+            note.innerHTML = `
+                <div class="rating">${'🎸'.repeat(rating)}</div>
+                <div class="alias">${alias}</div>
+                <div class="desc">${desc}</div>
+            `;
+            board.appendChild(note);
+        }
+
+        // Toggle owner view
+        function toggleOwnerView() {
+            isOwner = !isOwner;
+            const hiddenNotes = document.querySelectorAll('.note.hidden');
+            hiddenNotes.forEach(note => {
+                note.style.display = isOwner ? 'block' : 'none';
+            });
+        }
+
+        // Sample testimoni for demo
+        addTestimoni(5, 'CoderX', 'Amazing service! Highly recommend.');
+        addTestimoni(3, 'Anon', 'It was okay, but could be better.');
+        addTestimoni(4, 'TechFan', 'Good experience overall.');
+        addTestimoni(0, 'HiddenUser', 'Not satisfied at all.');
+    </script>
+</body>
+</html>
