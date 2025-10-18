@@ -2,256 +2,327 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>What's your thought?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Second of All</title>
 
-  <!-- Fonts: clean (Inter) + code vibe (JetBrains Mono) -->
+  <!-- Clean & neat + code vibe -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 
   <style>
+    /* ============ TOKENS ============ */
     :root{
-      --bg:#000;             /* dasar hitam */
-      --panel:#0e0e0f;       /* panel hitam keabu */
-      --red:#ff1a1a;         /* merah utama (stage light) */
-      --red-2:#c81313;       /* merah tua */
-      --muted:#b9b9b9;       /* teks sekunder */
-      --text:#ffffff;        /* teks utama */
-      --ring:rgba(255,26,26,.45);
+      --bg:#000;
+      --panel:#0b0b0c;
+      --panel-2:#111113;
+      --line:rgba(255,255,255,.08);
+      --red:#ff1a1a;
+      --red-2:#c81313;
+      --muted:#bdbdbd;
+      --text:#fff;
+      --ring:rgba(255,26,26,.4);
+      --radius:14px;
+      --pad:14px; /* compact */
+      --maxw:1000px;
+      --shadow:0 10px 28px rgba(0,0,0,.5);
+      --gap:12px;
+    }
+    @media (min-width:720px){
+      :root{ --pad:16px; --gap:14px; --radius:16px }
+    }
+    @media (min-width:1024px){
+      :root{ --pad:18px; --gap:16px; }
     }
 
+    /* ============ RESET/LAYOUT ============ */
     *{box-sizing:border-box}
     html,body{height:100%}
+    html{scroll-behavior:smooth}
     body{
       margin:0; color:var(--text);
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background:
-        radial-gradient(1200px 600px at 70% -10%, rgba(255,26,26,.15), transparent 60%),
-        radial-gradient(900px 400px at -10% 110%, rgba(255,26,26,.12), transparent 60%),
-        linear-gradient(180deg, #050505, #000);
-      overflow-x:hidden; padding:20px;
-      position:relative;
+        radial-gradient(1100px 520px at 70% -10%, rgba(255,26,26,.18), transparent 60%),
+        radial-gradient(800px 360px at -10% 100%, rgba(255,26,26,.12), transparent 60%),
+        linear-gradient(180deg,#070707,#000);
+      padding: env(safe-area-inset-top) var(--pad) env(safe-area-inset-bottom);
+    }
+    .container{
+      max-width: var(--maxw);
+      margin: 0 auto;
+      display: grid;
+      gap: var(--gap);
+      container-type: inline-size; /* enable container queries */
     }
 
-    /* Band vibes: subtle stage haze + vignette */
+    /* Cinematic overlay (vignette + thin scanlines) */
     body::before{
       content:""; position:fixed; inset:-10%;
       background:
-        radial-gradient(800px 400px at 80% 0%, rgba(255,26,26,.18), transparent 60%),
-        radial-gradient(600px 320px at 10% 100%, rgba(255,26,26,.12), transparent 60%);
-      filter: blur(20px); z-index:-2; pointer-events:none;
+        radial-gradient(600px 280px at 15% 100%, rgba(255,26,26,.12), transparent 58%),
+        radial-gradient(900px 420px at 92% 0%, rgba(255,26,26,.18), transparent 60%);
+      filter: blur(18px); z-index:-2; pointer-events:none;
     }
-    /* Film grain + scanlines halus */
     body::after{
       content:""; position:fixed; inset:0;
       background:
-        repeating-linear-gradient(0deg, rgba(255,255,255,.02) 0 1px, transparent 2px 4px),
-        radial-gradient(circle at 30% 20%, rgba(255,255,255,.03), transparent 30%);
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.03), transparent 40%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.02) 0 1px, transparent 2px 4px);
       mix-blend-mode: soft-light; opacity:.6; z-index:-1; pointer-events:none;
     }
 
-    .container{max-width:1100px; margin:0 auto}
-
-    .header{
-      text-align:center; margin:10px 0 22px;
-      letter-spacing:.6px;
+    /* ============ HEADER ============ */
+    header{
+      position: sticky; top: 0; z-index: 5;
+      backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,.25) 90%, transparent);
+      margin: calc(var(--gap)*-1) calc(var(--pad)*-1) 0;
+      padding: 10px var(--pad) 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap:12px; flex-wrap:wrap;
+      max-width: var(--maxw); margin:0 auto;
     }
     .title{
-      font-weight:800; font-size:clamp(26px,4.5vw,48px);
+      font-weight:800;
+      font-size: clamp(22px, 5.2cqi, 44px); /* fluid by container inline size */
+      letter-spacing:.6px;
       text-transform:uppercase;
-      line-height:1.05; margin:0;
-      text-shadow: 0 0 18px rgba(255,26,26,.35), 0 0 3px rgba(255,26,26,.9);
+      text-shadow: 0 0 16px rgba(255,26,26,.35), 0 0 2px rgba(255,26,26,.85);
+      margin: 2px 0 0;
     }
-    .subtitle{
-      margin-top:8px; color:var(--muted); font-size:.95rem;
+    .blink{
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-weight:700; margin-left:6px;
+      opacity:.9; border-right:2px solid var(--red);
+      animation: cursor 1.2s steps(2,end) infinite;
+    }
+    @keyframes cursor{ 0%,100%{border-color:transparent} 50%{border-color:var(--red)} }
+    .sub{
+      font-size: clamp(12px, 3.2cqi, 14px);
+      color:var(--muted);
+      margin-top: 2px;
     }
 
+    /* Owner toggle */
     .owner-toggle{
-      position:fixed; top:20px; right:20px; z-index:10;
-      background: linear-gradient(180deg, var(--red), var(--red-2));
+      background: linear-gradient(180deg,var(--red),var(--red-2));
       color:#fff; border:0; border-radius:999px;
-      padding:10px 16px; font-weight:700; cursor:pointer;
-      box-shadow: 0 10px 30px rgba(255,26,26,.25);
-      transition: transform .08s ease, box-shadow .2s ease;
+      padding:8px 12px; font-weight:800; cursor:pointer;
+      box-shadow: 0 8px 24px rgba(255,26,26,.26);
+      transition: transform .06s ease, box-shadow .2s ease;
+      font-size: clamp(12px, 3.6cqi, 14px);
     }
-    .owner-toggle:hover{ transform: translateY(-1px); box-shadow: 0 14px 36px rgba(255,26,26,.32) }
-    .owner-indicator{ font-size:.85rem; margin-left:8px; opacity:.9 }
+    .owner-toggle:hover{ transform: translateY(-1px); box-shadow: 0 12px 28px rgba(255,26,26,.34) }
+    .owner-ind{ margin-left:6px; opacity:.92 }
 
-    .form-container{
+    /* ============ PANELS ============ */
+    .panel{
       background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:16px; padding:18px; backdrop-filter: blur(6px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
-      margin-bottom:20px;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding: var(--pad);
+      box-shadow: var(--shadow);
     }
-    .form-container h2{
-      margin:4px 0 12px; font-weight:800; letter-spacing:.4px;
-      font-size:1.15rem;
+
+    /* Compact form grid */
+    .form-grid{
+      display:grid; gap: var(--gap);
+      grid-template-columns: 1fr;
     }
-    label{display:block; font-weight:600; margin:10px 0 8px}
-    .row{display:flex; gap:12px; flex-wrap:wrap}
+    @container (min-width: 560px){
+      .form-grid{ grid-template-columns: 220px 1fr; align-items:end }
+    }
+    label{ display:block; font-weight:700; margin: 2px 0 6px }
+
     .input, .select, .textarea{
-      width:100%; border-radius:12px; border:1px solid rgba(255,255,255,.12);
-      background: #0a0a0a; color:var(--text); padding:12px 14px;
-      outline:none; transition: box-shadow .2s ease, border-color .2s ease;
-      font-family: Inter, system-ui, sans-serif;
+      width:100%; border-radius: 12px;
+      border:1px solid var(--line);
+      background: var(--panel-2); color:var(--text);
+      padding: 10px 12px;
+      outline:none;
+      font: 600 14px/1 Inter, system-ui, sans-serif;
+      transition: box-shadow .2s ease, border-color .2s ease, background .2s ease;
     }
-    .textarea{min-height:120px; resize:vertical}
+    .textarea{ min-height: 110px; resize: vertical }
     .input:focus, .select:focus, .textarea:focus{
       border-color: var(--red);
       box-shadow: 0 0 0 4px var(--ring);
+      background: #0d0d0f;
     }
-    .button{
-      background: linear-gradient(180deg, var(--red), var(--red-2));
-      color:#fff; border:0; border-radius:12px;
-      padding:12px 16px; font-weight:800; cursor:pointer;
-      box-shadow: 0 10px 30px rgba(255,26,26,.22);
-      transition: transform .08s ease, box-shadow .2s ease;
-    }
-    .button:hover{ transform: translateY(-1px); box-shadow: 0 14px 38px rgba(255,26,26,.3) }
+    .row{ display:flex; gap: var(--gap); flex-wrap:wrap; align-items:center; justify-content:flex-end }
 
-    .board{
-      display:grid; gap:16px;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    .button{
+      background: linear-gradient(180deg,var(--red),var(--red-2));
+      color:#fff; border:0; border-radius:12px;
+      padding:10px 14px; font-weight:800; cursor:pointer;
+      box-shadow: 0 10px 26px rgba(255,26,26,.22);
+      transition: transform .06s ease, box-shadow .2s ease;
+      font-size:14px;
     }
+    .button:hover{ transform: translateY(-1px); box-shadow: 0 14px 32px rgba(255,26,26,.3) }
+
+    /* ============ BOARD ============ */
+    .board{
+      display:grid; gap: var(--gap);
+      grid-template-columns: repeat( auto-fill, minmax(220px, 1fr) );
+    }
+    @container (min-width: 720px){
+      .board{ grid-template-columns: repeat( auto-fill, minmax(260px, 1fr) ); }
+    }
+
     .note{
-      position:relative; background: var(--panel);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:16px; padding:16px;
-      box-shadow: 0 10px 24px rgba(0,0,0,.45);
-      transition: transform .18s ease, box-shadow .18s ease;
-      overflow:hidden;
+      position:relative; overflow:hidden;
+      background: var(--panel);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding: calc(var(--pad) - 2px);
+      box-shadow: var(--shadow);
+      transition: transform .14s ease, box-shadow .14s ease;
     }
     .note::before{
       content:""; position:absolute; inset:0;
-      background:
-        radial-gradient(500px 180px at -10% 0%, rgba(255,26,26,.12), transparent 60%);
+      background: radial-gradient(420px 160px at -10% 0%, rgba(255,26,26,.12), transparent 60%);
       pointer-events:none;
     }
-    .note:hover{ transform: translateY(-4px); box-shadow: 0 18px 36px rgba(0,0,0,.55) }
-    .note.hidden{ display:none }           /* default: tersembunyi */
-    body.owner .note.hidden{ display:block } /* Owner mode: tampilkan */
+    .note:hover{ transform: translateY(-3px); box-shadow: 0 16px 30px rgba(0,0,0,.6) }
+
+    .note.hidden{ display:none }
+    body.owner .note.hidden{ display:block }
 
     .rating{
-      display:flex; align-items:center; gap:6px; margin-bottom:10px;
-      color:var(--red); font-weight:800; letter-spacing:.4px;
-      text-shadow: 0 0 10px rgba(255,26,26,.55);
+      display:flex; align-items:center; gap:6px; margin-bottom:6px;
+      color:var(--red); font-weight:800; letter-spacing:.3px;
+      text-shadow: 0 0 10px rgba(255,26,26,.5);
+      font-size: 13px;
     }
-    .glyph{ font-size:20px; line-height:1 }
-    .alias{ font-weight:700; color:#fff; margin-bottom:8px }
-    .desc{ color:#ddd; line-height:1.55 }
-    .meta{ margin-top:10px; font-size:.8rem; color:var(--muted) }
+    .glyph{ font-size:18px; line-height:1 }
+    .alias{ font-weight:800; color:#fff; margin:2px 0 6px; font-size: 15px }
+    .desc{ color:#e7e7e7; line-height:1.55; font-size: 14px }
+    .meta{ margin-top:8px; font-size:12px; color:var(--muted) }
 
-    /* Subtle code rain (merah) di belakang konten */
-    .code-rain{ position:fixed; inset:0; pointer-events:none; z-index:-1; }
+    /* ============ IT CODE: lightweight “red code rain” ============ */
+    .code-rain{ position:fixed; inset:0; pointer-events:none; z-index:-1 }
     .code-rain span{
       position:absolute; color: rgba(255,26,26,.55);
-      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 12px; opacity:.9; filter: drop-shadow(0 0 6px rgba(255,26,26,.35));
-      animation: fall 5.2s linear infinite;
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      font-size: 11px; filter: drop-shadow(0 0 6px rgba(255,26,26,.3));
+      opacity:.9; animation: fall linear infinite;
       will-change: transform, opacity;
     }
     @keyframes fall{
-      from{ transform: translateY(-10vh) translateX(0); opacity:.95 }
-      to  { transform: translateY(110vh) translateX(10px); opacity:0.2 }
+      from{ transform: translateY(-8vh) translateX(0); opacity:.95 }
+      to  { transform: translateY(108vh) translateX(8px); opacity:.18 }
     }
 
-    @media (max-width:640px){
-      body{ padding:14px }
-      .owner-toggle{ top:12px; right:12px; padding:8px 14px }
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation-duration: .001s !important; animation-iteration-count: 1 !important; transition: none !important }
     }
   </style>
 </head>
 <body>
-  <button class="owner-toggle" id="ownerToggle">
-    Owner View <span class="owner-indicator" id="ownerIndicator">(OFF)</span>
-  </button>
+  <!-- sticky header: compact & cinematic -->
+  <header>
+    <div class="hero">
+      <div>
+        <h1 class="title">Second of All<span class="blink">&nbsp;</span></h1>
+        <div class="sub">Black × Red • Compact • Cinematic band look with subtle IT code vibes</div>
+      </div>
+      <button class="owner-toggle" id="ownerToggle">Owner View <span class="owner-ind" id="ownerInd">(OFF)</span></button>
+    </div>
+  </header>
 
-  <!-- Latar “IT codes” merah -->
+  <!-- subtle background code rain -->
   <div class="code-rain" id="codeRain"></div>
 
-  <div class="container">
-    <header class="header">
-      <h1 class="title">Second of All</h1>
-      <div class="subtitle">Artechpedia</div>
-    </header>
-
-    <section class="form-container">
-      <h2>Submit Testimoni</h2>
-      <form id="testimoniForm">
-        <div class="row">
-          <div style="flex:1 1 140px">
-            <label for="rating">Satisfaction (0–5):</label>
+  <main class="container" id="app">
+    <!-- FORM -->
+    <section class="panel">
+      <form id="form">
+        <div class="form-grid">
+          <div>
+            <label for="rating">Satisfaction (0–5)</label>
             <select id="rating" class="select" required>
-              <option value="" disabled selected>Pilih rating</option>
-              <option>0</option><option>1</option><option>2</option><option>3</option>
-              <option>4</option><option>5</option>
+              <option value="" disabled selected>Select rating</option>
+              <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
             </select>
           </div>
-          <div style="flex:2 1 240px">
-            <label for="alias">Alias:</label>
-            <input id="alias" class="input" placeholder="Tulis nama alias…" required/>
+          <div>
+            <label for="alias">Alias</label>
+            <input id="alias" class="input" placeholder="Your alias…" required/>
+          </div>
+          <div style="grid-column: 1 / -1">
+            <label for="desc">Description</label>
+            <textarea id="desc" class="textarea" rows="4" placeholder="Share your experience…" required></textarea>
           </div>
         </div>
-        <label for="desc" style="margin-top:10px">Description:</label>
-        <textarea id="desc" class="textarea" rows="4" placeholder="Ceritakan pengalamanmu…" required></textarea>
-        <div style="display:flex; justify-content:flex-end; margin-top:12px">
+        <div class="row" style="margin-top:10px">
           <button type="submit" class="button">Save Testimoni</button>
         </div>
       </form>
     </section>
 
+    <!-- BOARD -->
     <section class="board" id="board"></section>
-  </div>
+  </main>
 
   <script>
-    const board = document.getElementById('board');
-    const form = document.getElementById('testimoniForm');
+    // ===== Owner toggle (shows <4 ratings when ON) =====
     const ownerToggle = document.getElementById('ownerToggle');
-    const ownerIndicator = document.getElementById('ownerIndicator');
-    const codeRain = document.getElementById('codeRain');
-
-    // ---- Owner toggle (tampilkan juga rating < 4 saat ON)
+    const ownerInd = document.getElementById('ownerInd');
     let owner = false;
-    ownerToggle.addEventListener('click', () => {
+    ownerToggle.addEventListener('click', ()=>{
       owner = !owner;
       document.body.classList.toggle('owner', owner);
-      ownerIndicator.textContent = owner ? '(ON)' : '(OFF)';
+      ownerInd.textContent = owner ? '(ON)' : '(OFF)';
     });
 
-    // ---- Code rain merah (ringan)
+    // ===== Code rain (adaptive count for devices) =====
+    const codeRain = document.getElementById('codeRain');
     (function makeCodeRain(){
       const chars = '01{}[]<>=/*+-&|^~$#@';
-      const N = 90; // jumlah kolom/elemen
+      const width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      const height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+      // Fewer elements on small screens for stability
+      const N = width < 420 ? 36 : width < 900 ? 64 : 96;
       for(let i=0;i<N;i++){
         const s = document.createElement('span');
         s.textContent = chars[Math.floor(Math.random()*chars.length)];
         s.style.left = (Math.random()*100) + '%';
-        s.style.animationDelay = (Math.random()*5) + 's';
-        s.style.animationDuration = (4 + Math.random()*4) + 's';
+        const delay = Math.random()*5;
+        const dur = (width < 600 ? 5.5 : 4.5) + Math.random()*3.5;
+        s.style.animationDuration = dur + 's';
+        s.style.animationDelay = delay + 's';
         codeRain.appendChild(s);
       }
-      // ubah isi berkala biar berasa "hidup"
       setInterval(()=>{
-        [...codeRain.children].forEach(el=>{
-          if(Math.random()<0.2){
-            el.textContent = chars[Math.floor(Math.random()*chars.length)];
-          }
-        })
-      }, 600);
+        for(let i=0;i<6;i++){
+          const el = codeRain.children[Math.floor(Math.random() * codeRain.children.length)];
+          if (!el) break;
+          el.textContent = chars[Math.floor(Math.random()*chars.length)];
+        }
+      }, 700);
     })();
 
-    // ---- Render glyph rating 🎸 * rating (integer)
+    // ===== Helpers & App =====
+    const board = document.getElementById('board');
+    const form = document.getElementById('form');
+    function escapeHTML(str=''){
+      return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
     function ratingGlyphs(r){
       const n = Math.max(0, Math.min(5, Number(r)|0));
+      // use guitar pick + bar for band + compact look
       return '🎸'.repeat(n);
     }
-
     function addTestimoni(rating, alias, desc){
       const card = document.createElement('article');
       card.className = 'note ' + (rating < 4 ? 'hidden' : '');
       card.innerHTML = `
         <div class="rating">
-          <span class="glyph">${ratingGlyphs(rating)}</span>
+          <span class="glyph" aria-hidden="true">${ratingGlyphs(rating)}</span>
           <span>${rating}/5</span>
         </div>
         <div class="alias">${escapeHTML(alias)}</div>
@@ -261,32 +332,22 @@
       board.prepend(card);
     }
 
-    function escapeHTML(str=''){
-      return str.replace(/[&<>"']/g, m => ({
-        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-      }[m]));
-    }
-
     form.addEventListener('submit', e=>{
       e.preventDefault();
       const rating = document.getElementById('rating').value;
       const alias  = document.getElementById('alias').value.trim();
       const desc   = document.getElementById('desc').value.trim();
       if(!rating || !alias || !desc) return;
-
       addTestimoni(Number(rating), alias, desc);
       form.reset();
-      // focus balik ke alias biar cepat input berikutnya
       document.getElementById('alias').focus();
     });
 
-    // ---- Sample awal
-    addTestimoni(5, 'CoderX', 'Amazing service! Highly recommend.');
-    addTestimoni(3, 'Anon', 'It was okay, but could be better.');
-    addTestimoni(4, 'TechFan', 'Good experience overall.');
-    addTestimoni(0, 'HiddenUser', 'Not satisfied at all.');
+    // Sample content
+    addTestimoni(5, 'CoderX', 'Stage-ready! Clean UI, blazing fast.');
+    addTestimoni(3, 'Anon', 'Decent, but I prefer darker riffs.');
+    addTestimoni(4, 'TechFan', 'Solid experience. Love the glow.');
+    addTestimoni(0, 'HiddenUser', 'Not my tempo.');
   </script>
 </body>
 </html>
-
-
